@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    <TextView
+        android:id="@+id/mosdk_demo_id_pn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world" />
+    <TextView
+        android:id="@+id/mosdk_demo_id_vn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_pn"
+        android:text="@string/hello_world" />
+    <TextView
+        android:id="@+id/mosdk_demo_id_vc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_vn"
+        android:text="@string/hello_world" />
+    <TextView
+        android:id="@+id/mosdk_demo_id_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_vc"
+        android:text="@string/hello_world" />
+
+    <Button
+        android:id="@+id/mosdk_demo_id_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_tv"
+        android:text="@string/mosdk_demo_str_login" />
+
+    <Button
+        android:id="@+id/mosdk_demo_id_rp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_login"
+        android:text="@string/mosdk_demo_str_rp" />
+
+
+
+    <Button
+        android:id="@+id/mosdk_demo_id_uc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_rp"
+        android:text="@string/mosdk_demo_str_uc" />
+
+    <Button
+        android:id="@+id/mosdk_demo_id_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_uc"
+        android:text="@string/mosdk_demo_str_fb" />
+
+    <Button
+        android:id="@+id/mosdk_demo_id_faq"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_fb"
+        android:text="常见问题" />
+
+
+    <Button
+        android:id="@+id/mosdk_demo_id_conversation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/mosdk_demo_id_faq"
+        android:text="发起会话" />
+
+</RelativeLayout>

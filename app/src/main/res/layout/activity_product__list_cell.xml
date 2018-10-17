@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:id="@+id/productcellid" >
+    
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/productid"
+            android:paddingLeft="10dp"
+            android:layout_alignParentLeft="true"
+
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/buytag"
+            android:text="@string/mosdk_demo_str_buy"
+            android:paddingRight="10dp"
+            android:layout_alignParentRight="true"
+            
+            />
+   </RelativeLayout>
+   
+
+

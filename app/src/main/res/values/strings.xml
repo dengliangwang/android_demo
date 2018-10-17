@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">wmszw</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="mosdk_demo_str_login">登录</string>
+    <string name="mosdk_demo_str_rp">请求商品</string>
+    <string name="mosdk_demo_str_buy">购买</string>
+    <string name="mosdk_demo_str_uc">用户中心</string>
+    <string name="mosdk_demo_str_fb">FB 分享</string>
+    <string name="mosdk_demo_name">七剑</string>
+    <string name="mosdk_login_host">graph.morlia.com</string>
+    <string name="mosdk_login_port">80</string>
+    <string name="title_activity_product__list">Product_List</string>
+    <string name="productActivity_back_mainActivity">返回</string>
+    <string name="facebook_app_id">1283735508438146</string>
+    <string name="fb_login_protocol_scheme">fb1283735508438146</string>
+</resources>

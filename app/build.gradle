@@ -1,0 +1,83 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'bugly'
+
+bugly {
+    appId = '注册时分配的App ID' // 注册时分配的App ID
+    appKey = '注册时分配的App Key' // 注册时分配的App Key
+    debug = true
+}
+
+android {
+    signingConfigs {
+        release {
+            keyAlias 'morlia'
+            keyPassword 'morlia.hongkong'
+            storeFile file('/Users/Terry/Morlia_Work/adroid_studio_project/certs/morlia.keystore/morlia.keystore')
+            storePassword 'morlia.hongkong'
+        }
+        debug {
+            storeFile file('/Users/Terry/Morlia_Work/adroid_studio_project/certs/debug.keystore/debug.keystore')
+        }
+    }
+    compileSdkVersion 26
+
+    defaultConfig {
+        applicationId "com.jwk.kdjlgp"
+        minSdkVersion 15
+        targetSdkVersion 26
+
+        versionCode 1
+        versionName "1.0.1"
+
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.debug
+        }
+    }
+    buildToolsVersion '27.0.3'
+}
+repositories{
+    flatDir(dirs: 'libs')
+}
+
+dependencies {
+
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    testImplementation 'junit:junit:4.12'
+    //noinspection GradleCompatible
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'com.google.android.gms:play-services:11.8.0'
+    implementation 'com.appsflyer:af-android-sdk:4+@aar'
+    implementation 'com.facebook.android:facebook-login:[4,5)'
+    implementation 'com.facebook.android:facebook-share:[4,5)'
+    implementation 'com.helpshift:android-helpshift-aar:6.3.0'
+    implementation 'com.tencent.bugly:crashreport:latest.release'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+    implementation 'com.tencent.bugly:nativecrashreport:latest.release'
+    //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
+
+    implementation(name: 'mosdk-release', ext: 'aar')
+
+}
