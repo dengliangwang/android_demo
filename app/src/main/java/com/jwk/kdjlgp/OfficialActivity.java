@@ -1,10 +1,9 @@
 package com.jwk.kdjlgp;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 
-public class OfficialActivity extends AppCompatActivity {
+public class OfficialActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

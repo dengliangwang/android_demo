@@ -3,9 +3,7 @@ package com.jwk.kdjlgp;
 import java.util.HashMap;
 import java.util.List;
 
-import com.morlia.mosdk.MOLog;
-import com.morlia.mosdk.MOPlatform;
-import com.morlia.mosdk.MOProduct;
+
 
 
 import android.app.Activity;
@@ -17,19 +15,23 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.ujhgl.lohsy.ljsomsh.PTController;
+import com.ujhgl.lohsy.ljsomsh.PTGoods;
+import com.ujhgl.lohsy.ljsomsh.PTLog;
+
 public class ProductListAdapter extends BaseAdapter implements View.OnClickListener {
 	
 	private Context context;
-	private List<MOProduct> data;
+	private List<PTGoods> data;
 	private Activity activity;
 
-	public ProductListAdapter(List<MOProduct> aData,Activity aActivity) {
+	public ProductListAdapter(List<PTGoods> aData,Activity aActivity) {
 		// TODO Auto-generated constructor stub
 		this.data = aData;
 		this.activity = aActivity;
 	}
 	
-	public void setDta(List<MOProduct> data) {
+	public void setDta(List<PTGoods> data) {
 		this.data = data;
 	}
 	@Override
@@ -62,7 +64,7 @@ public class ProductListAdapter extends BaseAdapter implements View.OnClickListe
 			arg1 = LayoutInflater.from(arg2.getContext()).inflate(R.layout.activity_product__list_cell, null);
 		}
 		
-		MOProduct product = data.get(arg0);
+		PTGoods product = data.get(arg0);
 		
 		TextView textView = (TextView)arg1.findViewById(R.id.productid);
 		textView.setText(product.getName());
@@ -86,13 +88,13 @@ public class ProductListAdapter extends BaseAdapter implements View.OnClickListe
 			
 			int tag = Integer.parseInt(arg0.getTag(R.id.product_buy_btn_tag).toString());
 			HashMap<String, String> aParams = new HashMap<String, String>();
-			aParams.put("server",	"server");
-			aParams.put("role",		"role");
+			aParams.put("server",	"1");//服务器标识
+			aParams.put("role",		"role");//角色名
 			aParams.put("extra1",	"1LZuZ3uVFQR7EAlUZouDZ1Z1Zto6ouvz");
 			aParams.put("extra2",	"0.99");
-			MOPlatform platform = MOPlatform.instance();
+			PTController platform = PTController.instance();
 			platform.buyProduct(activity, data.get(tag), aParams);
-			MOLog.info("点击了 " + tag + " 列");
+			PTLog.info("点击了 " + tag + " 列");
 			
 			break;
 			

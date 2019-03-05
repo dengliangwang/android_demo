@@ -1,56 +1,44 @@
 package com.jwk.kdjlgp;
 
+
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.PixelFormat;
-import android.net.Uri;
-import android.os.Build;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.morlia.mosdk.MOConstants;
-import com.morlia.mosdk.MOError;
-import com.morlia.mosdk.MOGameUser;
-import com.morlia.mosdk.MOInitListener;
-import com.morlia.mosdk.MOLog;
-import com.morlia.mosdk.MOLoginListener;
-import com.morlia.mosdk.MOLogoutListener;
-import com.morlia.mosdk.MOPlatform;
-import com.morlia.mosdk.MOProduct;
-import com.morlia.mosdk.MOShare;
-import com.morlia.mosdk.MOShareListener;
-import com.morlia.mosdk.MOShareType;
-import com.morlia.mosdk.MOUser;
-import com.morlia.mosdk.floatwindow.FloatActionController;
-import com.morlia.mosdk.floatwindow.permission.FloatPermissionManager;
-import com.morlia.mosdk.gamecontrol.MOGameControlListener;
-import com.morlia.mosdk.morlia.PermissionManager;
-import com.tencent.bugly.crashreport.CrashReport;
+import com.ujhgl.lohsy.ljsomsh.PTController;
+import com.ujhgl.lohsy.ljsomsh.PTError;
+import com.ujhgl.lohsy.ljsomsh.PTGameUser;
+import com.ujhgl.lohsy.ljsomsh.PTGoods;
+import com.ujhgl.lohsy.ljsomsh.PTInitCallBack;
+import com.ujhgl.lohsy.ljsomsh.PTLog;
+import com.ujhgl.lohsy.ljsomsh.PTLoginCallBack;
+import com.ujhgl.lohsy.ljsomsh.PTLogoutCallBack;
+import com.ujhgl.lohsy.ljsomsh.PTShare;
+import com.ujhgl.lohsy.ljsomsh.PTShareCallBack;
+import com.ujhgl.lohsy.ljsomsh.PTShareType;
+import com.ujhgl.lohsy.ljsomsh.PTUser;
+import com.ujhgl.lohsy.ljsomsh.gamecontrol.PTGameControlCallBack;
 
 
 public class MainActivity
-        extends AppCompatActivity
-        implements  MOInitListener,
-                    MOLoginListener,
-                    MOLogoutListener,
-                    MOShareListener ,MOGameControlListener,
+        extends Activity
+        implements PTInitCallBack,
+        PTLoginCallBack,
+        PTLogoutCallBack,
+        PTShareCallBack,PTGameControlCallBack,
         ActivityCompat.OnRequestPermissionsResultCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 
-        final MOPlatform aPlatform = MOPlatform.instance();
+        final PTController aPlatform = PTController.instance();
         aPlatform.setInitListener(this);
+
 
         super.onCreate(savedInstanceState);
 
@@ -62,11 +50,11 @@ public class MainActivity
         aPlatform.setLogoutListener(this);
 
         // GameControl
-        aPlatform.setmGameControlListener(this);
+       // aPlatform.setmGameControlListener(this);
 
         aPlatform.setShareListener(this);
 
-        //MOPlatform.instance().requestPermissions(this);
+        //PTController.instance().requestPermissions(this);
 
 
         // 显示包名，版本号 build号相关
@@ -152,16 +140,16 @@ public class MainActivity
 
                 if (aPlatform.logined())
                 {
-                    MOPlatform aPlatform	= MOPlatform.instance();
-                    MOUser aUser			= aPlatform.getUser();
-                    MOShare aShare			= aPlatform.getShare(MOShareType.Facebook);
+                    PTController aPlatform	= PTController.instance();
+                    PTUser aUser			= aPlatform.getUser();
+                    PTShare aShare			= aPlatform.getShare(PTShareType.Facebook);
                     String aLocale			= aPlatform.getLocale();
                     String aExtra = "aExtra";//自定义字段，服务器发货会传给游戏服务器
 
                     String gameRole = "role";
                     String gameServer = "1";
-                    //若传自定义字段请使用 MOGameUser aGameUser = new MOGameUser(gameRole, gameServer, aLocale,aExtra);
-                    MOGameUser aGameUser = new MOGameUser(gameRole, gameServer, aLocale);
+                    //若传自定义字段请使用 PTGameUser aGameUser = new PTGameUser(gameRole, gameServer, aLocale,aExtra);
+                    PTGameUser aGameUser = new PTGameUser(gameRole, gameServer, aLocale);
                     aShare.showSnsView(MainActivity.this,aUser,aGameUser, null);
 
                 }
@@ -174,7 +162,7 @@ public class MainActivity
         faqBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MOPlatform.instance().showFAQs(MainActivity.this);
+                PTController.instance().showFAQs(MainActivity.this);
             }
         });
 
@@ -183,7 +171,7 @@ public class MainActivity
         cvtBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MOPlatform.instance().showConversation(MainActivity.this);
+                PTController.instance().showConversation(MainActivity.this);
             }
         });
 
@@ -202,7 +190,7 @@ public class MainActivity
     public void onActivityResult(int aRequestCode, int aResultCode, Intent aData)
     {
 
-        final MOPlatform aPlatform = MOPlatform.instance();
+        final PTController aPlatform = PTController.instance();
         if (aPlatform.onActivityResult(this, aRequestCode, aResultCode, aData))
             return;
 
@@ -216,7 +204,7 @@ public class MainActivity
     {
         super.onStop();
 
-        MOPlatform platform = MOPlatform.instance();
+        PTController platform = PTController.instance();
         platform.dismisFloatWindow(this);
         platform.inactive(this);
     }
@@ -227,15 +215,15 @@ public class MainActivity
         super.onResume();
 
 
-        MOPlatform platform = MOPlatform.instance();
+        PTController platform = PTController.instance();
         if (platform.logined())
         {
             String aLocale			= platform.getLocale();
 
-            MOGameUser aGameUser = new MOGameUser("1000", "1", aLocale);
+            PTGameUser aGameUser = new PTGameUser("1000", "1", aLocale);
             platform.showFloatWindow(this,aGameUser);
         }
-        MOPlatform.instance().active(this);
+        PTController.instance().active(this);
     }
 
     //请求权限
@@ -243,16 +231,16 @@ public class MainActivity
     {
         String[] permisions = {};
         int callbackrequeatCode = 109;
-        PermissionManager manager = new PermissionManager();
-        Activity activity = this;
-
-        /**
-         * permisions 权限数组
-         * activity 回调Activity，需要实现ActivityCompat.OnRequestPermissionsResultCallback的方法
-         * callbackrequeatCode 在activity 的
-         *
-         * */
-        manager.requestMultiplyPermissions(permisions,activity,callbackrequeatCode);
+//        PT manager = new PTPermissionManager();
+//        Activity activity = this;
+//
+//        /**
+//         * permisions 权限数组
+//         * activity 回调Activity，需要实现ActivityCompat.OnRequestPermissionsResultCallback的方法
+//         * callbackrequeatCode 在activity 的
+//         *
+//         * */
+//        manager.requestMultiplyPermissions(permisions,activity,callbackrequeatCode);
     }
 
     @Override
@@ -266,12 +254,12 @@ public class MainActivity
 
 
     @Override
-    public void initSuccess(MOPlatform platform)
+    public void initSuccess(PTController platform)
     {
 
         mInited = true;
 
-        MOLog.info("Demo initSuccess");
+        PTLog.info("Demo initSuccess");
 
         mLogin.setEnabled(true);
 
@@ -280,12 +268,12 @@ public class MainActivity
     }
 
     @Override
-    public void initFailure(MOError error)
+    public void initFailure(PTError error)
     {
 
         mInited = false;
 
-        MOLog.info("Demo initFailure: %s", error);
+        PTLog.info("Demo initFailure: %s", error);
     }
 
     public void loginCancelled()
@@ -295,38 +283,40 @@ public class MainActivity
         System.exit(0);
     }
 
-    public void loginSuccess(MOUser aUser)
+    public void loginSuccess(PTUser aUser)
     {
         mLogin.setEnabled(false);
         mRP.setEnabled(true);
         mUC.setEnabled(true);
         mFB.setEnabled(true);
 
-        MOPlatform aPlatform	= MOPlatform.instance();
+        //用户唯一标识 aUser.getID();
+
+        PTController aPlatform	= PTController.instance();
         String aLocale			= aPlatform.getLocale();
 
         String gameRole = "1000";
         String gameServerId = "1";
-        MOGameUser aGameUser = new MOGameUser(gameRole, gameServerId, aLocale);
-       MOPlatform.instance().showFloatWindow(this,aGameUser);
+        PTGameUser aGameUser = new PTGameUser(gameRole, gameServerId, aLocale);
+       PTController.instance().showFloatWindow(this,aGameUser);
     }
 
-    public void loginFailure(MOError aError)
+    public void loginFailure(PTError aError)
     {
 
-        MOLog.info("Demo loginFailure: %s", aError);
+        PTLog.info("Demo loginFailure: %s", aError);
     }
 
     public void logoutSuccess(String aUser)
     {
 
-        MOLog.info("Demo logoutSuccess: %s", aUser);
+        PTLog.info("Demo logoutSuccess: %s", aUser);
     }
 
-    public void logoutFailure(MOError aError)
+    public void logoutFailure(PTError aError)
     {
 
-        MOLog.info("Demo logoutFailure: %s", aError);
+        PTLog.info("Demo logoutFailure: %s", aError);
     }
 
 
@@ -354,10 +344,10 @@ public class MainActivity
     //private Button		mBuy;
     private Button		mUC;
     private Button		mFB;
-    private MOProduct[] mProducts;
+    private PTGoods[] mProducts;
 
     @Override
-    public void shouldGoToTestServer(MOUser user) {
+    public void shouldGoToTestServer(PTUser user) {
 
         //显示测试服
         Intent intent = new Intent(this,TestServerActivity.class);
@@ -366,7 +356,7 @@ public class MainActivity
     }
 
     @Override
-    public void shouldGoToOfficialServer(MOUser user) {
+    public void shouldGoToOfficialServer(PTUser user) {
 
         //显示游戏服
         Intent intent = new Intent(this,OfficialActivity.class);

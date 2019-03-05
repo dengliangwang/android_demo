@@ -1,7 +1,9 @@
 package com.jwk.kdjlgp;
 
 import android.app.Application;
-import com.morlia.mosdk.MOPlatform;
+
+import com.ujhgl.lohsy.ljsomsh.PTController;
+
 
 /**
  * Created by dengliang.wang on 17/11/7.
@@ -12,14 +14,14 @@ public class MOApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        MOPlatform.instance().init(this);
+        PTController.instance().init(this);
 
     }
 
     @Override
     public void onTerminate() {
 
-        MOPlatform.instance().destroy();
+        PTController.instance().destroy();
         super.onTerminate();
     }
 }

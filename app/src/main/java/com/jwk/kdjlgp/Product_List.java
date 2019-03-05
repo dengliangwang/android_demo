@@ -7,22 +7,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+
+import com.ujhgl.lohsy.ljsomsh.PTConstants;
+import com.ujhgl.lohsy.ljsomsh.PTController;
+import com.ujhgl.lohsy.ljsomsh.PTError;
+import com.ujhgl.lohsy.ljsomsh.PTGoods;
+import com.ujhgl.lohsy.ljsomsh.PTLog;
+import com.ujhgl.lohsy.ljsomsh.PTTradeCallBack;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import com.morlia.mosdk.MOConstants;
-import com.morlia.mosdk.MOError;
-import com.morlia.mosdk.MOLog;
-import com.morlia.mosdk.MOPlatform;
-import com.morlia.mosdk.MOPlugin;
-import com.morlia.mosdk.MOProduct;
-import com.morlia.mosdk.MOTradeListener;
 
 
-public class Product_List extends Activity implements MOTradeListener {
 
-	private List<MOProduct> mProducts;
+
+public class Product_List extends Activity implements PTTradeCallBack {
+
+	private List<PTGoods> mProducts;
 	private ListView listView;
 
 
@@ -32,8 +35,8 @@ public class Product_List extends Activity implements MOTradeListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_product__list);
 
-		mProducts = new ArrayList<MOProduct>();
-		MOPlatform platform = MOPlatform.instance();
+		mProducts = new ArrayList<PTGoods>();
+		PTController platform = PTController.instance();
 		platform.setTradeListener(this);
 		platform.requestProducts(this);
 
@@ -60,7 +63,7 @@ public class Product_List extends Activity implements MOTradeListener {
 	public void onActivityResult(int aRequestCode, int aResultCode, Intent aData)
 	{
 
-		final MOPlatform aPlatform = MOPlatform.instance();
+		final PTController aPlatform = PTController.instance();
 		if (aPlatform.onActivityResult(this, aRequestCode, aResultCode, aData))
 			return;
 
@@ -69,7 +72,7 @@ public class Product_List extends Activity implements MOTradeListener {
 
 
 
-	public void requestProductsSuccess(MOProduct[] aProducts)
+	public void requestProductsSuccess(PTGoods[] aProducts)
 	{
 	    /**
 	     * ħ��ƽ̨����
@@ -91,13 +94,13 @@ public class Product_List extends Activity implements MOTradeListener {
 		productListAdapter.setDta(mProducts);
 		productListAdapter.notifyDataSetChanged();
 
-		MOLog.info("Demo requestProductsSuccess: %s" + Arrays.toString(aProducts));
+		PTLog.info("Demo requestProductsSuccess: %s" + Arrays.toString(aProducts));
 
 
 
 	}
 
-	public void requestProductsFailure(MOError aError)
+	public void requestProductsFailure(PTError aError)
 	{
 	    /**
 	     * ħ��ƽ̨����
@@ -105,7 +108,7 @@ public class Product_List extends Activity implements MOTradeListener {
 	     * ������Ʒ��Ϣʧ�ܣ����������ԭ��
 	     */
 
-		MOLog.info("Demo requestProductsFailure: %s", aError);
+		PTLog.info("Demo requestProductsFailure: %s", aError);
 	}
 
 	public void buyProductSuccess(Map<String, Object> aArgs)
@@ -115,18 +118,18 @@ public class Product_List extends Activity implements MOTradeListener {
 	     *
 	     * ����ɹ�����ȡ��Ӧ����Ʒ����
 	     */
-		MOProduct aProduct = null;
+		PTGoods aProduct = null;
 
-		Object aObj = aArgs.get(MOConstants.ARG_PRODUCT);
-		if (null != aObj && aObj instanceof MOProduct)
+		Object aObj = aArgs.get(PTConstants.ARG_PRODUCT);
+		if (null != aObj && aObj instanceof PTGoods)
 		{
-			aProduct = (MOProduct)aObj;
+			aProduct = (PTGoods)aObj;
 		}
 
-		MOLog.info("Demo buyProductSuccess: %s", aProduct);
+		PTLog.info("Demo buyProductSuccess: %s", aProduct);
 	}
 
-	public void buyProductFailure(MOError aError)
+	public void buyProductFailure(PTError aError)
 	{
 	    /**
 	     * ħ��ƽ̨����
@@ -134,7 +137,7 @@ public class Product_List extends Activity implements MOTradeListener {
 	     * ����ʧ�ܣ����������ԭ��
 	     */
 
-		MOLog.info("Demo buyProductFailure: %s", aError);
+		PTLog.info("Demo buyProductFailure: %s", aError);
 	}
 
 	public void consumeSuccess(Map<String, Object> aArgs)
@@ -146,7 +149,7 @@ public class Product_List extends Activity implements MOTradeListener {
 	     */
 	}
 
-	public void consumeFailure(MOError aError)
+	public void consumeFailure(PTError aError)
 	{
 	    /**
 	     * ħ��ƽ̨����
