@@ -263,6 +263,11 @@ public class MainActivity
 
         mLogin.setEnabled(true);
 
+        if (!platform.logined())
+        {
+            platform.launchAutomaticLoginFlow(this);
+        }
+
 
 
     }

@@ -13,4 +13,7 @@
     <string name="productActivity_back_mainActivity">返回</string>
     <string name="facebook_app_id">1283735508438146</string>
     <string name="fb_login_protocol_scheme">fb1283735508438146</string>
+    <string name="mosdk_default_locale" translatable="false">zh-Hant</string>
+    <string name="mosdk_morlia_host" translatable="false">newlogingg.digimonking.com</string>
+    <integer name="mosdk_morlia_port">443</integer>
 </resources>

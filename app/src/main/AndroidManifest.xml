@@ -57,7 +57,7 @@
         </receiver>
 
         <activity
-            android:name="com.morlia.mosdk.ui.MOActivity"
+            android:name="com.ujhgl.lohsy.ljsomsh.ui.PTActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
