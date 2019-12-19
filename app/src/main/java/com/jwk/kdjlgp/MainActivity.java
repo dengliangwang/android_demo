@@ -141,16 +141,11 @@ public class MainActivity
                 if (aPlatform.logined())
                 {
                     PTController aPlatform	= PTController.instance();
-                    PTUser aUser			= aPlatform.getUser();
                     PTShare aShare			= aPlatform.getShare(PTShareType.Facebook);
-                    String aLocale			= aPlatform.getLocale();
-                    String aExtra = "aExtra";//自定义字段，服务器发货会传给游戏服务器
-
-                    String gameRole = "role";
-                    String gameServer = "1";
-                    //若传自定义字段请使用 PTGameUser aGameUser = new PTGameUser(gameRole, gameServer, aLocale,aExtra);
-                    PTGameUser aGameUser = new PTGameUser(gameRole, gameServer, aLocale);
-                    aShare.showSnsView(MainActivity.this,aUser,aGameUser, null);
+                    //若传自定义字段请使用
+                    // String aExtra = "aExtra";//自定义字段，服务器发货会传给游戏服务器
+                    // PTGameUser aGameUser = new PTGameUser(aExtra);
+                    aShare.showSnsView(MainActivity.this);
 
                 }
             }
@@ -220,7 +215,7 @@ public class MainActivity
         {
             String aLocale			= platform.getLocale();
 
-            PTGameUser aGameUser = new PTGameUser("1000", "1", aLocale);
+            PTGameUser aGameUser = new PTGameUser();
             platform.showFloatWindow(this,aGameUser);
         }
         PTController.instance().active(this);
@@ -298,12 +293,13 @@ public class MainActivity
         //用户唯一标识 aUser.getID();
 
         PTController aPlatform	= PTController.instance();
-        String aLocale			= aPlatform.getLocale();
+        PTGameUser aGameUser = new PTGameUser();
+        aPlatform.showFloatWindow(this,aGameUser);
 
-        String gameRole = "1000";
-        String gameServerId = "1";
-        PTGameUser aGameUser = new PTGameUser(gameRole, gameServerId, aLocale);
-       PTController.instance().showFloatWindow(this,aGameUser);
+        //上传服务器标识和角色名
+        String aServer = "10";//游戏服标识
+        String aRole = "Vayne";//角色名
+        aPlatform.submitGameUserInfor(aServer,aRole);
     }
 
     public void loginFailure(PTError aError)
@@ -351,21 +347,26 @@ public class MainActivity
     private Button		mFB;
     private PTGoods[] mProducts;
 
-    @Override
-    public void shouldGoToTestServer(PTUser user) {
 
-        //显示测试服
-        Intent intent = new Intent(this,TestServerActivity.class);
-        startActivity(intent);
-
-    }
 
     @Override
-    public void shouldGoToOfficialServer(PTUser user) {
+    public void enterServerWithUserInfor(PTUser ptUser, int i) {
 
-        //显示游戏服
-        Intent intent = new Intent(this,OfficialActivity.class);
-        startActivity(intent);
+        //上传服务器标识和角色名
+        String aServer = "10";//游戏服标识
+        String aRole = "Vayne";//角色名
+        PTController.instance().submitGameUserInfor(aServer,aRole);
 
+        if ( i == 0){
+            //显示测试服
+            Intent intent = new Intent(this,TestServerActivity.class);
+            startActivity(intent);
+
+        }
+        else  if (i == 0){
+            //显示游戏服
+            Intent intent = new Intent(this,OfficialActivity.class);
+            startActivity(intent);
+        }
     }
 }

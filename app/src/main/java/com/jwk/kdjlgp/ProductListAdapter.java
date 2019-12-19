@@ -88,8 +88,6 @@ public class ProductListAdapter extends BaseAdapter implements View.OnClickListe
 			
 			int tag = Integer.parseInt(arg0.getTag(R.id.product_buy_btn_tag).toString());
 			HashMap<String, String> aParams = new HashMap<String, String>();
-			aParams.put("server",	"1");//服务器标识
-			aParams.put("role",		"role");//角色名
 			aParams.put("extra1",	"1LZuZ3uVFQR7EAlUZouDZ1Z1Zto6ouvz");
 			aParams.put("extra2",	"0.99");
 			PTController platform = PTController.instance();
