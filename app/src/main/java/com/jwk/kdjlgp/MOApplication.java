@@ -2,7 +2,8 @@ package com.jwk.kdjlgp;
 
 import android.app.Application;
 
-import com.ujhgl.lohsy.ljsomsh.PTController;
+import com.ujhgl.lohsy.ljsomsh.HYCenter;
+
 
 
 /**
@@ -14,14 +15,14 @@ public class MOApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        PTController.instance().init(this);
+        HYCenter.shared().ApplicationInit(this);
 
     }
 
     @Override
     public void onTerminate() {
 
-        PTController.instance().destroy();
+        HYCenter.shared().applicationDestroy();
         super.onTerminate();
     }
 }

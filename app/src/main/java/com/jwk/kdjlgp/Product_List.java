@@ -8,12 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.ujhgl.lohsy.ljsomsh.PTConstants;
-import com.ujhgl.lohsy.ljsomsh.PTController;
-import com.ujhgl.lohsy.ljsomsh.PTError;
-import com.ujhgl.lohsy.ljsomsh.PTGoods;
-import com.ujhgl.lohsy.ljsomsh.PTLog;
-import com.ujhgl.lohsy.ljsomsh.PTTradeCallBack;
+
+import com.ujhgl.lohsy.ljsomsh.HYCenter;
+import com.ujhgl.lohsy.ljsomsh.HYConstants;
+import com.ujhgl.lohsy.ljsomsh.HYError;
+import com.ujhgl.lohsy.ljsomsh.HYLog;
+import com.ujhgl.lohsy.ljsomsh.HYProduct;
+import com.ujhgl.lohsy.ljsomsh.HYTradeDelegate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,9 +24,9 @@ import java.util.Map;
 
 
 
-public class Product_List extends Activity implements PTTradeCallBack {
+public class Product_List extends Activity implements HYTradeDelegate {
 
-	private List<PTGoods> mProducts;
+	private List<HYProduct> mProducts;
 	private ListView listView;
 
 
@@ -35,10 +36,10 @@ public class Product_List extends Activity implements PTTradeCallBack {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_product__list);
 
-		mProducts = new ArrayList<PTGoods>();
-		PTController platform = PTController.instance();
-		platform.setTradeListener(this);
-		platform.requestProducts(this);
+		mProducts = new ArrayList<HYProduct>();
+		HYCenter platform = HYCenter.shared();
+		platform.setTradeDelegate(this);
+		platform.getProductsFromStore(this);
 
 		listView = (ListView) findViewById(R.id.product_list_view);
 
@@ -63,7 +64,7 @@ public class Product_List extends Activity implements PTTradeCallBack {
 	public void onActivityResult(int aRequestCode, int aResultCode, Intent aData)
 	{
 
-		final PTController aPlatform = PTController.instance();
+		final HYCenter aPlatform = HYCenter.shared();
 		if (aPlatform.onActivityResult(this, aRequestCode, aResultCode, aData))
 			return;
 
@@ -72,7 +73,7 @@ public class Product_List extends Activity implements PTTradeCallBack {
 
 
 
-	public void requestProductsSuccess(PTGoods[] aProducts)
+	public void requestProductsSuccess(HYProduct[] aProducts)
 	{
 	    /**
 	     * ħ��ƽ̨����
@@ -94,13 +95,13 @@ public class Product_List extends Activity implements PTTradeCallBack {
 		productListAdapter.setDta(mProducts);
 		productListAdapter.notifyDataSetChanged();
 
-		PTLog.info("Demo requestProductsSuccess: %s" + Arrays.toString(aProducts));
+		HYLog.info("Demo requestProductsSuccess: %s" + Arrays.toString(aProducts));
 
 
 
 	}
 
-	public void requestProductsFailure(PTError aError)
+	public void requestProductsFailure(HYError aError)
 	{
 	    /**
 	     * ħ��ƽ̨����
@@ -108,7 +109,7 @@ public class Product_List extends Activity implements PTTradeCallBack {
 	     * ������Ʒ��Ϣʧ�ܣ����������ԭ��
 	     */
 
-		PTLog.info("Demo requestProductsFailure: %s", aError);
+		HYLog.info("Demo requestProductsFailure: %s", aError);
 	}
 
 	public void buyProductSuccess(Map<String, Object> aArgs)
@@ -118,18 +119,18 @@ public class Product_List extends Activity implements PTTradeCallBack {
 	     *
 	     * ����ɹ�����ȡ��Ӧ����Ʒ����
 	     */
-		PTGoods aProduct = null;
+		HYProduct aProduct = null;
 
-		Object aObj = aArgs.get(PTConstants.ARG_PRODUCT);
-		if (null != aObj && aObj instanceof PTGoods)
+		Object aObj = aArgs.get(HYConstants.ARG_PRODUCT);
+		if (null != aObj && aObj instanceof HYProduct)
 		{
-			aProduct = (PTGoods)aObj;
+			aProduct = (HYProduct)aObj;
 		}
 
-		PTLog.info("Demo buyProductSuccess: %s", aProduct);
+		HYLog.info("Demo buyProductSuccess: %s", aProduct);
 	}
 
-	public void buyProductFailure(PTError aError)
+	public void buyProductFailure(HYError aError)
 	{
 	    /**
 	     * ħ��ƽ̨����
@@ -137,7 +138,7 @@ public class Product_List extends Activity implements PTTradeCallBack {
 	     * ����ʧ�ܣ����������ԭ��
 	     */
 
-		PTLog.info("Demo buyProductFailure: %s", aError);
+		HYLog.info("Demo buyProductFailure: %s", aError);
 	}
 
 	public void consumeSuccess(Map<String, Object> aArgs)
@@ -149,7 +150,7 @@ public class Product_List extends Activity implements PTTradeCallBack {
 	     */
 	}
 
-	public void consumeFailure(PTError aError)
+	public void consumeFailure(HYError aError)
 	{
 	    /**
 	     * ħ��ƽ̨����

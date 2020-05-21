@@ -15,23 +15,23 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.ujhgl.lohsy.ljsomsh.PTController;
-import com.ujhgl.lohsy.ljsomsh.PTGoods;
-import com.ujhgl.lohsy.ljsomsh.PTLog;
+import com.ujhgl.lohsy.ljsomsh.HYCenter;
+import com.ujhgl.lohsy.ljsomsh.HYProduct;
+import com.ujhgl.lohsy.ljsomsh.HYLog;
 
 public class ProductListAdapter extends BaseAdapter implements View.OnClickListener {
 	
 	private Context context;
-	private List<PTGoods> data;
+	private List<HYProduct> data;
 	private Activity activity;
 
-	public ProductListAdapter(List<PTGoods> aData,Activity aActivity) {
+	public ProductListAdapter(List<HYProduct> aData,Activity aActivity) {
 		// TODO Auto-generated constructor stub
 		this.data = aData;
 		this.activity = aActivity;
 	}
 	
-	public void setDta(List<PTGoods> data) {
+	public void setDta(List<HYProduct> data) {
 		this.data = data;
 	}
 	@Override
@@ -64,7 +64,7 @@ public class ProductListAdapter extends BaseAdapter implements View.OnClickListe
 			arg1 = LayoutInflater.from(arg2.getContext()).inflate(R.layout.activity_product__list_cell, null);
 		}
 		
-		PTGoods product = data.get(arg0);
+		HYProduct product = data.get(arg0);
 		
 		TextView textView = (TextView)arg1.findViewById(R.id.productid);
 		textView.setText(product.getName());
@@ -87,12 +87,17 @@ public class ProductListAdapter extends BaseAdapter implements View.OnClickListe
 		case R.id.buytag:
 			
 			int tag = Integer.parseInt(arg0.getTag(R.id.product_buy_btn_tag).toString());
+
 			HashMap<String, String> aParams = new HashMap<String, String>();
+			aParams.put("server",	"10");
+			aParams.put("role",		"Vayne");
+			//商品编号(如果同一个商品id，对应了不同的商品，可使用该字段作区分,如果一个商品id对应一个商品，此字段可忽略)
+			aParams.put("number","0");
+			//可选自定义参数
 			aParams.put("extra1",	"1LZuZ3uVFQR7EAlUZouDZ1Z1Zto6ouvz");
 			aParams.put("extra2",	"0.99");
-			PTController platform = PTController.instance();
-			platform.buyProduct(activity, data.get(tag), aParams);
-			PTLog.info("点击了 " + tag + " 列");
+			HYCenter platform = HYCenter.shared();
+			platform.purchaseProduct(activity, data.get(tag), aParams);
 			
 			break;
 			

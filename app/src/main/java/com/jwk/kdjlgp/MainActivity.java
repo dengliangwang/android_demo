@@ -9,35 +9,37 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import com.ujhgl.lohsy.ljsomsh.PTController;
-import com.ujhgl.lohsy.ljsomsh.PTError;
-import com.ujhgl.lohsy.ljsomsh.PTGameUser;
-import com.ujhgl.lohsy.ljsomsh.PTGoods;
-import com.ujhgl.lohsy.ljsomsh.PTInitCallBack;
-import com.ujhgl.lohsy.ljsomsh.PTLog;
-import com.ujhgl.lohsy.ljsomsh.PTLoginCallBack;
-import com.ujhgl.lohsy.ljsomsh.PTLogoutCallBack;
-import com.ujhgl.lohsy.ljsomsh.PTShare;
-import com.ujhgl.lohsy.ljsomsh.PTShareCallBack;
-import com.ujhgl.lohsy.ljsomsh.PTShareType;
-import com.ujhgl.lohsy.ljsomsh.PTUser;
-import com.ujhgl.lohsy.ljsomsh.gamecontrol.PTGameControlCallBack;
+
+import com.ujhgl.lohsy.ljsomsh.HYCenter;
+import com.ujhgl.lohsy.ljsomsh.HYError;
+import com.ujhgl.lohsy.ljsomsh.HYGameUser;
+import com.ujhgl.lohsy.ljsomsh.HYInitDelegate;
+import com.ujhgl.lohsy.ljsomsh.HYLog;
+import com.ujhgl.lohsy.ljsomsh.HYLoginDelegate;
+import com.ujhgl.lohsy.ljsomsh.HYLogoutDelegate;
+import com.ujhgl.lohsy.ljsomsh.HYShare;
+import com.ujhgl.lohsy.ljsomsh.HYShareDelegate;
+import com.ujhgl.lohsy.ljsomsh.HYShareType;
+import com.ujhgl.lohsy.ljsomsh.HYUser;
+import com.ujhgl.lohsy.ljsomsh.gamecontrol.HYGameControlDelegate;
+
+import java.util.HashMap;
 
 
 public class MainActivity
         extends Activity
-        implements PTInitCallBack,
-        PTLoginCallBack,
-        PTLogoutCallBack,
-        PTShareCallBack,PTGameControlCallBack,
+        implements HYInitDelegate,
+        HYLoginDelegate,
+        HYLogoutDelegate,
+        HYShareDelegate, HYGameControlDelegate,
         ActivityCompat.OnRequestPermissionsResultCallback{
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 
-        final PTController aPlatform = PTController.instance();
-        aPlatform.setInitListener(this);
+        final HYCenter aPlatform = HYCenter.shared();
+        aPlatform.setInitDelegate(this);
 
 
         super.onCreate(savedInstanceState);
@@ -46,15 +48,15 @@ public class MainActivity
 
 
         // listeners
-        aPlatform.setLoginListener(this);
-        aPlatform.setLogoutListener(this);
+        aPlatform.setLoginDelegate(this);
+        aPlatform.setLogoutDelegate(this);
 
         // GameControl
        // aPlatform.setmGameControlListener(this);
 
-        aPlatform.setShareListener(this);
+        aPlatform.setShareDelegate(this);
 
-        //PTController.instance().requestPermissions(this);
+        //HYCenter.shared().requestPermissions(this);
 
 
         // 显示包名，版本号 build号相关
@@ -89,7 +91,7 @@ public class MainActivity
 
                // CrashReport.testJavaCrash();
 
-                if (!aPlatform.logined())
+                if (!aPlatform.userHasLogged())
                 {
                     aPlatform.login(MainActivity.this);
                 }
@@ -99,7 +101,7 @@ public class MainActivity
 
         // request products
         Button aRP = (Button)findViewById(R.id.mosdk_demo_id_rp);
-        aRP.setEnabled(aPlatform.logined());
+        aRP.setEnabled(aPlatform.userHasLogged());
         aRP.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
@@ -116,15 +118,15 @@ public class MainActivity
 
         // user center
         Button aUC = (Button)findViewById(R.id.mosdk_demo_id_uc);
-        aUC.setEnabled(aPlatform.logined());
+        aUC.setEnabled(aPlatform.userHasLogged());
         aUC.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
 
-                if (aPlatform.logined())
+                if (aPlatform.userHasLogged())
                 {
-                    aPlatform.showUserCenter(MainActivity.this);
+                    aPlatform.presentUserCenter(MainActivity.this);
                 }
             }
         });
@@ -132,20 +134,27 @@ public class MainActivity
 
         // fb
         Button aFB = (Button)findViewById(R.id.mosdk_demo_id_fb);
-        aFB.setEnabled(aPlatform.logined());
+        aFB.setEnabled(aPlatform.userHasLogged());
         aFB.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View v)
             {
 
-                if (aPlatform.logined())
+                if (aPlatform.userHasLogged())
                 {
-                    PTController aPlatform	= PTController.instance();
-                    PTShare aShare			= aPlatform.getShare(PTShareType.Facebook);
-                    //若传自定义字段请使用
-                    // String aExtra = "aExtra";//自定义字段，服务器发货会传给游戏服务器
-                    // PTGameUser aGameUser = new PTGameUser(aExtra);
-                    aShare.showSnsView(MainActivity.this);
+                    HYCenter aPlatform	= HYCenter.shared();
+                    HYUser aUser			= aPlatform.getUser();
+                    HYShare aShare			= aPlatform.getShare(HYShareType.Facebook);
+                    String aLocale			= aPlatform.getLocale();
+                    String aExtra = "aExtra";//自定义字段，服务器发货会传给游戏服务器
+
+                    String gameRole = "role";
+                    String gameServer = "1";
+
+                    //若传自定义字段请使用 MOGameUser aGameUser = new MOGameUser(gameRole, gameServer, aLocale,aExtra);
+                    HYGameUser aGameUser = new HYGameUser(gameRole, gameServer, aLocale);
+
+                    aShare.showFB(MainActivity.this,aUser,aGameUser, null);
 
                 }
             }
@@ -157,7 +166,7 @@ public class MainActivity
         faqBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PTController.instance().showFAQs(MainActivity.this);
+                HYCenter.shared().showHelpCenter(MainActivity.this);
             }
         });
 
@@ -166,7 +175,7 @@ public class MainActivity
         cvtBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PTController.instance().showConversation(MainActivity.this);
+                HYCenter.shared().startConversation(MainActivity.this);
             }
         });
 
@@ -185,7 +194,7 @@ public class MainActivity
     public void onActivityResult(int aRequestCode, int aResultCode, Intent aData)
     {
 
-        final PTController aPlatform = PTController.instance();
+        final HYCenter aPlatform = HYCenter.shared();
         if (aPlatform.onActivityResult(this, aRequestCode, aResultCode, aData))
             return;
 
@@ -199,7 +208,7 @@ public class MainActivity
     {
         super.onStop();
 
-        PTController platform = PTController.instance();
+        HYCenter platform = HYCenter.shared();
         platform.dismisFloatWindow(this);
         platform.inactive(this);
     }
@@ -210,15 +219,15 @@ public class MainActivity
         super.onResume();
 
 
-        PTController platform = PTController.instance();
-        if (platform.logined())
+        HYCenter platform = HYCenter.shared();
+        if (platform.userHasLogged())
         {
             String aLocale			= platform.getLocale();
 
-            PTGameUser aGameUser = new PTGameUser();
-            platform.showFloatWindow(this,aGameUser);
+            HYGameUser aGameUser = new HYGameUser("1000", "1", aLocale);
+            platform.presentFloatWindow(this,aGameUser);
         }
-        PTController.instance().active(this);
+        HYCenter.shared().active(this);
     }
 
     //请求权限
@@ -249,18 +258,18 @@ public class MainActivity
 
 
     @Override
-    public void initSuccess(PTController platform)
+    public void initSuccess(HYCenter platform)
     {
 
         mInited = true;
 
-        PTLog.info("Demo initSuccess");
+        HYLog.info("Demo initSuccess");
 
         mLogin.setEnabled(true);
 
-        if (!platform.logined())
+        if (!platform.userHasLogged())
         {
-            platform.launchAutomaticLoginFlow(this);
+            platform.automaticLogin(this);
         }
 
 
@@ -268,12 +277,12 @@ public class MainActivity
     }
 
     @Override
-    public void initFailure(PTError error)
+    public void initFailure(HYError error)
     {
 
         mInited = false;
 
-        PTLog.info("Demo initFailure: %s", error);
+        HYLog.info("Demo initFailure: %s", error);
     }
 
     public void loginCancelled()
@@ -283,7 +292,7 @@ public class MainActivity
         System.exit(0);
     }
 
-    public void loginSuccess(PTUser aUser)
+    public void loginSuccess(HYUser aUser)
     {
         mLogin.setEnabled(false);
         mRP.setEnabled(true);
@@ -292,32 +301,31 @@ public class MainActivity
 
         //用户唯一标识 aUser.getID();
 
-        PTController aPlatform	= PTController.instance();
-        PTGameUser aGameUser = new PTGameUser();
-        aPlatform.showFloatWindow(this,aGameUser);
+        HYCenter aPlatform	= HYCenter.shared();
+        String aLocale			= aPlatform.getLocale();
 
-        //上传服务器标识和角色名
-        String aServer = "10";//游戏服标识
-        String aRole = "Vayne";//角色名
-        aPlatform.submitGameUserInfor(aServer,aRole);
+        String gameRole = "1000";
+        String gameServerId = "1";
+        HYGameUser aGameUser = new HYGameUser(gameRole, gameServerId, aLocale);
+        HYCenter.shared().presentFloatWindow(this,aGameUser);
     }
 
-    public void loginFailure(PTError aError)
+    public void loginFailure(HYError aError)
     {
 
-        PTLog.info("Demo loginFailure: %s", aError);
+        HYLog.info("Demo loginFailure: %s", aError);
     }
 
     public void logoutSuccess(String aUser)
     {
 
-        PTLog.info("Demo logoutSuccess: %s", aUser);
+        HYLog.info("Demo logoutSuccess: %s", aUser);
     }
 
-    public void logoutFailure(PTError aError)
+    public void logoutFailure(HYError aError)
     {
 
-        PTLog.info("Demo logoutFailure: %s", aError);
+        HYLog.info("Demo logoutFailure: %s", aError);
     }
 
 
@@ -345,17 +353,20 @@ public class MainActivity
     //private Button		mBuy;
     private Button		mUC;
     private Button		mFB;
-    private PTGoods[] mProducts;
+
 
 
 
     @Override
-    public void enterServerWithUserInfor(PTUser ptUser, int i) {
+    public void enterServerWithUserInfor(HYUser HYUser, int i) {
 
         //上传服务器标识和角色名
         String aServer = "10";//游戏服标识
         String aRole = "Vayne";//角色名
-        PTController.instance().submitGameUserInfor(aServer,aRole);
+        HashMap<String,String> aPlayerInfor = new HashMap<String, String>();
+        aPlayerInfor.put("server",aServer);
+        aPlayerInfor.put("role",aRole);
+        HYCenter.shared().submitPlayerInfo(aPlayerInfor);
 
         if ( i == 0){
             //显示测试服
